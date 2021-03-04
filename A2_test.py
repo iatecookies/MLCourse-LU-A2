@@ -65,9 +65,9 @@ def test_DTree_best_split_minority():
     model = DTree(metric=minority_class)
     X = avocados.iloc[:, :-1]
     y = avocados.iloc[:, -1]
-    feature, loss = model._best_split(X, y)
+    feature, impurity = model._best_split(X, y)
     assert feature == 'firmness'
-    assert loss == 0.25
+    assert impurity == 0.25
 
 
 def test_DTree_best_split_gini():
@@ -75,9 +75,9 @@ def test_DTree_best_split_gini():
     model = DTree(metric=gini)
     X = avocados.iloc[:, :-1]
     y = avocados.iloc[:, -1]
-    feature, loss = model._best_split(X, y)
+    feature, impurity = model._best_split(X, y)
     assert feature == 'firmness'
-    assert 0.33 < loss < 0.34
+    assert 0.33 < impurity < 0.34
 
 
 def test_DTree_best_split_entropy():
@@ -85,9 +85,9 @@ def test_DTree_best_split_entropy():
     model = DTree(metric=entropy)
     X = avocados.iloc[:, [0, 1, 3, 4]]  # leave out firmness as feature
     y = avocados.iloc[:, -1]
-    feature, loss = model._best_split(X, y)
+    feature, impurity = model._best_split(X, y)
     assert feature == 'softness'
-    assert 0.86 < loss < 0.87
+    assert 0.86 < impurity < 0.87
 
 
 def test_DTree_fit_basics():
@@ -96,12 +96,12 @@ def test_DTree_fit_basics():
     y = avocados.iloc[:, -1]
     model = DTree(metric=minority_class)
     assert model._label is None, "Before fitting, this should not be set yet."
-    assert model._loss is None, "Before fitting, this should not be set yet."
+    assert model._impurity is None, "Before fitting, this should not be set yet."
     assert model._samples is None, "Before fitting, this should not be set yet."
     assert len(model._distribution) == 0, "Before fitting, this should not be set yet."
     model.fit(X, y)
     assert model._label is not None, "After fitting, we should know the majority label in the top node"
-    assert model._loss is not None, "After fitting, we should know the loss in the top node"
+    assert model._impurity is not None, "After fitting, we should know the impurity in the top node"
     assert isinstance(model._samples, int), "After fitting, this count how many training samples reached this node"
     assert len(model._distribution) > 0, "After fitting, this should store the frequency of each class in the node"
 
@@ -149,21 +149,21 @@ def test_DTree_fit_recusively_child_labels():
     recursive(model)
 
 
-def test_DTree_fit_recusively_decreasing_loss():
-    """ Check if the weighted loss of children is always lower than that of the parent """
-    def recursive_loss(model):
+def test_DTree_fit_recusively_decreasing_impurity():
+    """ Check if the weighted impurity of children is always lower than that of the parent """
+    def recursive_impurity(model):
         if model._split:
-            yes_loss, yes_samples = recursive_loss(model._yes)
-            no_loss, no_samples = recursive_loss(model._no)
-            weighted_loss = (yes_loss * yes_samples) + (no_loss * no_samples)
-            assert weighted_loss < (model._loss * model._samples), (
-                "The weighted loss of the children should be smaller than the parent")
-        return model._loss, model._samples
+            yes_impurity, yes_samples = recursive_impurity(model._yes)
+            no_impurity, no_samples = recursive_impurity(model._no)
+            weighted_impurity = (yes_impurity * yes_samples) + (no_impurity * no_samples)
+            assert weighted_impurity < (model._impurity * model._samples), (
+                "The weighted impurity of the children should be smaller than the parent")
+        return model._impurity, model._samples
     X = avocados.iloc[:, :-1]
     y = avocados.iloc[:, -1]
     model = DTree(metric=minority_class)
     model.fit(X, y)
-    recursive_loss(model)
+    recursive_impurity(model)
 
 
 def test_DTree_fit_text_string():

@@ -7,32 +7,32 @@ def minority_class(labels):
         return 0
     frequencies = labels.value_counts().values  # array, sorted in descending order
     probabilities = [f / len(labels) for f in frequencies[1:]]   # everything except the first class
-    loss = sum(probabilities)
-    return loss
+    impurity = sum(probabilities)
+    return impurity
 
 
 def gini(labels):
     raise NotImplementedError('Your code here')
-    return loss
+    return impurity
 
 
 def entropy(labels):
     raise NotImplementedError('Your code here')
-    return loss
+    return impurity
 
 
 class DTree:
     def __init__(self, metric):
         """Set up a new tree.
 
-        We use the `metric` parameter to supply a loss function such as Gini or Entropy.
+        We use the `metric` parameter to supply a impurity function such as Gini or Entropy.
         The other class variables should be set by the "fit" method.
         """
-        self._metric = metric  # what are we measuring loss with? (Gini, Entropy, Minority Class...)
+        self._metric = metric  # what are we measuring impurity with? (Gini, Entropy, Minority Class...)
         self._samples = None  # how many training samples reached this node?
         self._distribution = []  # what was the class distribution in this node?
         self._label = None  # What was the majority class of training samples that reached this node?
-        self._loss = None  # what was the loss at this node?
+        self._impurity = None  # what was the impurity at this node?
         self._split = False  # if False, then this is a leaf. If you branch from this node, use this to store the name of the feature you're splitting on.
         self._yes = None  # Holds the "yes" DTree object; None if this is still a leaf node
         self._no = None  # Holds the "no" DTree object; None if this is still a leaf node
@@ -43,15 +43,15 @@ class DTree:
         :param features: a pd.DataFrame with named training feature columns
         :param labels: a pd.Series or pd.DataFrame with training labels
         :return: `best_so_far` is a string with the name of the best feature,
-        and `best_so_far_loss` is the loss on that feature
+        and `best_so_far_impurity` is the impurity on that feature
 
-        For each candidate feature the weighted loss of the "yes" and "no"
+        For each candidate feature the weighted impurity of the "yes" and "no"
         instances for that feature are computed using self._metric.
 
-        We select the feature with the lowest weighted loss.
+        We select the feature with the lowest weighted impurity.
         """
         raise NotImplementedError('Your code here')
-        return best_so_far, best_so_far_loss
+        return best_so_far, best_so_far_impurity
 
     def fit(self, features, labels):
         """ Generate a decision tree by recursively fitting & splitting them
@@ -61,11 +61,11 @@ class DTree:
         :return: Nothing.
 
         First this node is fitted as if it was a leaf node: the training majority label, number of samples,
-        class distribution and loss.
+        class distribution and impurity.
 
         Then we evaluate which feature might give the best split.
 
-        If there is a best split that gives a lower weighed loss of the child nodes than the loss in this node,
+        If there is a best split that gives a lower weighed impurity of the child nodes than the impurity in this node,
         initialize the self._yes and self._no variables as new DTrees with the same metric.
         Then, split the training instance features & labels according to the best splitting feature found,
         and fit the Yes subtree with the instances that split to the True side,
@@ -73,7 +73,7 @@ class DTree:
         """
         raise NotImplementedError('Your code here')
 
-        split, split_loss = self._best_split(features, labels)  # Find the best split, if any
+        split, split_impurity = self._best_split(features, labels)  # Find the best split, if any
 
         raise NotImplementedError('... and the rest of your code here')
 

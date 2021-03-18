@@ -21,17 +21,17 @@ def test_minority_class():
 
 def test_gini():
     data = pd.Series(['a', 'a', 'a', 'a', 'a', 'a', 'b', 'b', 'b', 'b'])
-    assert gini(data) == 0.48  # simple two-label
+    assert 0.47 < gini(data) < 0.49  # simple two-label
     data = pd.Series(['a', 'a', 'a', 'a', 'a', 'c', 'b', 'b', 'b', 'b'])
-    assert gini(data) == 0.58  # three labels
+    assert 0.57 < gini(data) < 0.59   # three labels
     data = pd.Series(['a', 'a', 'a', 'c', 'c', 'c', 'b', 'b', 'b', 'b'])
-    assert gini(data) == 0.66  # no absolute majority
+    assert 0.65 < gini(data) < 0.67  # no absolute majority
     data = pd.Series([1, 1, -1, -1])
-    assert gini(data) == 0.5  # even split, numeric labels
+    assert 0.49 < gini(data) < 0.51  # even split, numeric labels
     data = pd.Series([1, -1, -1, -1])
-    assert gini(data) == 0.375  # first instance != majority
+    assert 0.374 < gini(data) < 0.376  # first instance != majority
     data = pd.Series([1, 'a', -1, -1])
-    assert gini(data) == 0.625  # mixed data types
+    assert 0.624 < gini(data) < 0.626  # mixed data types
 
 
 def test_entropy():
@@ -42,11 +42,11 @@ def test_entropy():
     data = pd.Series(['a', 'a', 'a', 'c', 'c', 'c', 'b', 'b', 'b', 'b'])
     assert 1.57 < entropy(data) < 1.58  # no absolute majority
     data = pd.Series([1, 1, -1, -1])
-    assert entropy(data) == 1.0  # even split, numeric labels
+    assert 0.9 < entropy(data) < 1.1  # even split, numeric labels
     data = pd.Series([1, -1, -1, -1])
     assert 0.81 < entropy(data) < 0.82  # first instance != majority
     data = pd.Series([1, 'a', -1, -1])
-    assert entropy(data) == 1.5  # mixed data types
+    assert 1.4 < entropy(data) < 1.6  # mixed data types
 
 
 # A toy dataset about judging the ripeness of avocados

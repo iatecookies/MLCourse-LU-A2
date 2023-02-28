@@ -128,7 +128,7 @@ class KFolds:
         self.k = k
         self.folds = []
         indices = np.arange(X.shape[0])  # integer indices of the instances
-        if seed is not None:  # Set random seed if desired.
+        if seed != None:  # Set random seed if desired.
             np.random.seed(seed=seed)
         np.random.shuffle(indices)  # Shuffle in-place.
         fold_size = X.shape[0] / k  # How many instances per fold? Note that this is a floating point number!

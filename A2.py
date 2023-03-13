@@ -12,14 +12,22 @@ def minority_class(labels):
 
 
 def gini(labels):
-    raise NotImplementedError('Your code here')
+    if len(labels) == 0:
+        return 0
+    frequencies = labels.value_counts().values  # array, sorted in descending order
+    probabilities = [f / len(labels) for f in frequencies]   # everything except the first class
+    terms = [i*i for i in probabilities]
+    impurity = 1 - sum(terms)
     return impurity
-
 
 def entropy(labels):
-    raise NotImplementedError('Your code here')
+    if len(labels) == 0:
+        return 0
+    frequencies = labels.value_counts().values  # array, sorted in descending order
+    probabilities = [f / len(labels) for f in frequencies]   # everything except the first class
+    terms = [i* np.log2(i) for i in probabilities]
+    impurity = -1 * sum(terms)
     return impurity
-
 
 class DTree:
     def __init__(self, metric):
@@ -50,7 +58,17 @@ class DTree:
 
         We select the feature with the lowest weighted impurity.
         """
-        raise NotImplementedError('Your code here')
+        best_so_far_impurity = 1
+        best_so_far = ''
+
+        for i in features:
+            #split data  into subsets
+            if self._metric is minority_class:
+                print(minority_class(features[i]))
+                if minority_class(features[i]) < best_so_far_impurity:
+                    best_so_far_impurity = minority_class(features[i])
+                    best_so_far = i
+        
         return best_so_far, best_so_far_impurity
 
     def fit(self, features, labels):
@@ -151,3 +169,46 @@ class KFolds:
         y_train = self.y.iloc[train]
         y_test = self.y.iloc[test]
         return X_train, X_test, y_train, y_test
+
+
+
+#OPEN QUESTION 5
+
+# k = 5
+
+# list_entropy = []
+# list_gini = []
+
+# for i in range(1, k):
+#     print("K ", i)
+    
+#     folds = KFolds(X, y, 5)  # set it up by putting data in
+#     X_train, X_test, y_train, y_test = folds.get_fold(fold_num=i)  # Now get the data out, divided according to fold 3
+    
+#     model = DecisionTreeClassifier(criterion="entropy")
+#     model.fit(X_train, y_train)
+#     y_pred = model.predict(X_test)
+#     #print(f'SK {accuracy_score(y_test, y_pred)}')
+#     list_entropy.append(accuracy_score(y_test, y_pred))
+#     #print(export_text(model, feature_names=fn))
+    
+    
+#     folds = KFolds(X, y, i)  # set it up by putting data in
+#     X_train, X_test, y_train, y_test = folds.get_fold(fold_num=i)  # Now get the data out, divided according to fold 3
+    
+#     model = DecisionTreeClassifier(criterion="gini")
+#     model.fit(X_train, y_train)
+#     y_pred = model.predict(X_test)
+#     #print(f'SK {accuracy_score(y_test, y_pred)}')
+#     list_gini.append(accuracy_score(y_test, y_pred))
+#     #print(export_text(model, feature_names=fn))
+    
+# print(list_entropy)
+
+# acc_score = np.array(list_entropy)
+# print ('ACC mean:', '{0:0.2f}'.format(np.mean(acc_score)))
+# print ('ACC std:', '{0:0.2f}'.format(np.std(acc_score)))
+# print(list_gini)
+# acc2_score = np.array(list_gini)
+# print ('ACC mean:', '{0:0.2f}'.format(np.mean(acc2_score)))
+# print ('ACC std:', '{0:0.2f}'.format(np.std(acc2_score)))

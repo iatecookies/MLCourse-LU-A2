@@ -172,43 +172,40 @@ class KFolds:
 
 
 
-#OPEN QUESTION 5
+#OPEN QUESTION 5 was unclear if i should submit the code as well.
 
 # k = 5
 
 # list_entropy = []
 # list_gini = []
 
-# for i in range(1, k):
+
+# folds = KFolds(X, y, k)  # set it up by putting data in
+# folds2 = KFolds(X, y, k)  # set it up by putting data in
+
+# for i in range(k):
 #     print("K ", i)
     
-#     folds = KFolds(X, y, 5)  # set it up by putting data in
-#     X_train, X_test, y_train, y_test = folds.get_fold(fold_num=i)  # Now get the data out, divided according to fold 3
+#     X_train, X_test, y_train, y_test = folds.get_fold(i)  # Now get the data out, divided according to fold 3
     
 #     model = DecisionTreeClassifier(criterion="entropy")
 #     model.fit(X_train, y_train)
 #     y_pred = model.predict(X_test)
-#     #print(f'SK {accuracy_score(y_test, y_pred)}')
 #     list_entropy.append(accuracy_score(y_test, y_pred))
-#     #print(export_text(model, feature_names=fn))
     
-    
-#     folds = KFolds(X, y, i)  # set it up by putting data in
-#     X_train, X_test, y_train, y_test = folds.get_fold(fold_num=i)  # Now get the data out, divided according to fold 3
+#     X_train, X_test, y_train, y_test = folds2.get_fold(i)  # Now get the data out, divided according to fold 3
     
 #     model = DecisionTreeClassifier(criterion="gini")
 #     model.fit(X_train, y_train)
 #     y_pred = model.predict(X_test)
-#     #print(f'SK {accuracy_score(y_test, y_pred)}')
 #     list_gini.append(accuracy_score(y_test, y_pred))
-#     #print(export_text(model, feature_names=fn))
     
 # print(list_entropy)
-
 # acc_score = np.array(list_entropy)
-# print ('ACC mean:', '{0:0.2f}'.format(np.mean(acc_score)))
-# print ('ACC std:', '{0:0.2f}'.format(np.std(acc_score)))
+# print ('ACC score mean for Entropy:', '{0:0.2f}'.format(np.mean(acc_score)))
+# print ('ACC score std for Entropy:', '{0:0.2f}'.format(np.std(acc_score)))
+
 # print(list_gini)
 # acc2_score = np.array(list_gini)
-# print ('ACC mean:', '{0:0.2f}'.format(np.mean(acc2_score)))
-# print ('ACC std:', '{0:0.2f}'.format(np.std(acc2_score)))
+# print ('ACC score mean for Gini:', '{0:0.2f}'.format(np.mean(acc2_score)))
+# print ('ACC score std for Gini:', '{0:0.2f}'.format(np.std(acc2_score)))
